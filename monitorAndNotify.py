@@ -1,4 +1,3 @@
-import mysql.connector
 import requests
 import json
 import os
@@ -6,32 +5,31 @@ from datetime import datetime
 #from sense_hat import SenseHat
 from dotenv import load_dotenv
 from pathlib import Path
-load_dotenv(verbose=True)
-env_path = Path('.')/'.env'
-load_dotenv(dotenv_path=env_path)
-"""mydb = mysql.connector.connect(
-  host= 'localhost',
-  user= 'mysql',
-  password= 'admin',
-  database= 'temandhum',
-  port= 3306
-  )"""
+from databaseConnection import MySQLConn
+
+
 class Monitor:
   #sense = SenseHat()
-  
-  
-  #mycursor = mydb.cursor()
+  mysqlconn = MySQLConn()
+  mydb = mysqlconn.conn
+  now = datetime.now()
+  time = now.strftime("%m/%d/%Y") 
+  mycursor = mysqlconn.cursor
   def __init__(self, temperature, humidity):
     self.temperature = temperature
     self.humidity = humidity
-    now = datetime.now()
-    self.time = now.strftime("%m/%d/%Y, %H:%M:%S") 
+    
 
-  """def saveToDatabase(self):
-    sql = "INSERT INTO records (temp, humi) VALUES (%d,%d)"
-    val = (self.temperature, self.humidity)
+  def saveToDatabase(self):
+    
+    if self.checkComfortableRange():
+      sql = "INSERT INTO records (date,temperature, humidity, comfortable) VALUES (%s,%s,%s,true)"
+      val = (self.time,self.temperature, self.humidity)
+    else:
+      sql = "INSERT INTO records (date,temperature, humidity, comfortable) VALUES (%s,%s,%s,false)"
+      val = (self.time, self.temperature, self.humidity) 
     self.mycursor.execute(sql,val)
-    self.mycursor.commit()"""
+    self.mydb.commit()
 
   def checkComfortableRange(self):
     with open('config.json') as configFile:
@@ -40,8 +38,16 @@ class Monitor:
       return False
     return True
 
+  def didNotify(self):
+    sql = "SELECT count(comfortable) FROM records WHERE records.comfortable is false"
+    self.mycursor.execute(sql)
+    result = self.mycursor.fetchone()
+    if result == 0:
+      return False
+    return True
+
   def pushNotify(self):
-    if not self.checkComfortableRange():
+    if not self.checkComfortableRange() and not self.didNotify():
       url = "https://api.pushbullet.com/v2/pushes"
       header = {'Content-Type': 'application/json','access-token': os.getenv("ACCESS_TOKEN")}
       data = {"body":"The temperature is out of comfortable ranges","title":"Temperature Warning","type":"note"}
@@ -49,5 +55,6 @@ class Monitor:
       print(res.text)
 
 
-monitor = Monitor(5,70)
+monitor = Monitor(9,70)
+monitor.saveToDatabase()
 monitor.pushNotify()
