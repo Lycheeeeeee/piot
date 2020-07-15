@@ -9,32 +9,32 @@ from databaseConnection import MySQLConn
 
 
 class Monitor:
-  #sense = SenseHat()
+  sense = SenseHat()
   mysqlconn = MySQLConn()
   mydb = mysqlconn.conn
   now = datetime.now()
   time = now.strftime("%m/%d/%Y") 
   mycursor = mysqlconn.cursor
-  def __init__(self, temperature, humidity):
-    self.temperature = temperature
-    self.humidity = humidity
+  #def __init__(self, temperature, humidity):
+  #  self.temperature = temperature
+  #  self.humidity = humidity
     
 
   def saveToDatabase(self):
     
     if self.checkComfortableRange():
       sql = "INSERT INTO records (date,temperature, humidity, comfortable) VALUES (%s,%s,%s,true)"
-      val = (self.time,self.temperature, self.humidity)
+      val = (self.time,self.sense.get_temperature(), self.sense.get_humidity())
     else:
       sql = "INSERT INTO records (date,temperature, humidity, comfortable) VALUES (%s,%s,%s,false)"
-      val = (self.time, self.temperature, self.humidity) 
+      val = (self.time, self.sense.get_temperature(), self.sense.get_humidity()) 
     self.mycursor.execute(sql,val)
     self.mydb.commit()
 
   def checkComfortableRange(self):
     with open('config.json') as configFile:
       data = json.load(configFile)
-    if self.temperature < data['cold_max'] or self.temperature >data['hot_min']:
+    if self.sense.get_temperature() < data['cold_max'] or self.sense.get_temperature() >data['hot_min']:
       return False
     return True
 
@@ -55,6 +55,6 @@ class Monitor:
       print(res.text)
 
 
-monitor = Monitor(9,70)
+monitor = Monitor()
 monitor.saveToDatabase()
 monitor.pushNotify()
