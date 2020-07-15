@@ -47,7 +47,7 @@ class Monitor:
     return True
 
   def pushNotify(self):
-    if not self.checkComfortableRange() and not self.didNotify():
+    if self.checkComfortableRange() and not self.didNotify():
       url = "https://api.pushbullet.com/v2/pushes"
       header = {'Content-Type': 'application/json','access-token': os.getenv("ACCESS_TOKEN")}
       data = {"body":"The temperature is out of comfortable ranges","title":"Temperature Warning","type":"note"}
