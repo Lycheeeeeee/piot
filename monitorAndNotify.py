@@ -31,14 +31,14 @@ class Monitor:
     self.mycursor.execute(sql,val)
     self.mydb.commit()
 
-  def checkComfortableRange(self):
+  def comfortableRange(self):
     with open('config.json') as configFile:
       data = json.load(configFile)
     if self.sense.get_temperature() < data['cold_max'] or self.sense.get_temperature() >data['hot_min']:
       return False
     return True
 
-  def didNotify(self):
+  def notified(self):
     sql = "SELECT count(comfortable) FROM records WHERE records.comfortable is false"
     self.mycursor.execute(sql)
     result = self.mycursor.fetchone()
@@ -47,7 +47,7 @@ class Monitor:
     return True
 
   def pushNotify(self):
-    if self.checkComfortableRange() and not self.didNotify():
+    if not self.comfortableRange() and not self.notified():
       url = "https://api.pushbullet.com/v2/pushes"
       header = {'Content-Type': 'application/json','access-token': os.getenv("ACCESS_TOKEN")}
       data = {"body":"The temperature is out of comfortable ranges","title":"Temperature Warning","type":"note"}
@@ -56,5 +56,6 @@ class Monitor:
 
 
 monitor = Monitor()
+monitor.checkComfortableRange()
 monitor.saveToDatabase()
 monitor.pushNotify()
