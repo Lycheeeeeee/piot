@@ -39,10 +39,11 @@ class Monitor:
     return True
 
   def notified(self):
-    sql = "SELECT count(comfortable) FROM records WHERE records.comfortable is false"
-    self.mycursor.execute(sql)
+    sql = "SELECT count(comfortable) FROM records WHERE records.comfortable is false And records.date = %s"
+    val= (self.time)
+    self.mycursor.execute(sql,val)
     result = self.mycursor.fetchone()
-    if result == 0:
+    if result[0] == 0:
       return False
     return True
 
