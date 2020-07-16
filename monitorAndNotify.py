@@ -1,8 +1,9 @@
+#!/usr/bin/python3
 import requests
 import json
 import os
 from datetime import datetime
-#from sense_hat import SenseHat
+from sense_hat import SenseHat
 from dotenv import load_dotenv
 from pathlib import Path
 from databaseConnection import MySQLConn
@@ -39,11 +40,12 @@ class Monitor:
     return True
 
   def notified(self):
-    sql = "SELECT count(comfortable) FROM records WHERE records.comfortable is false And records.date = %s"
-    val= (self.time)
-    self.mycursor.execute(sql,val)
+    sql = """SELECT count(comfortable) FROM records WHERE records.comfortable is
+    false and records.date %(date)s"""
+    value= {'date':self.time}
+    self.mycursor.execute(sql,value)
     result = self.mycursor.fetchone()
-    if result[0] == 0:
+    if result[0] == 1:
       return False
     return True
 
@@ -57,6 +59,5 @@ class Monitor:
 
 
 monitor = Monitor()
-monitor.checkComfortableRange()
 monitor.saveToDatabase()
 monitor.pushNotify()

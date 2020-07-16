@@ -45,12 +45,11 @@ class Display:
             self.show_digit(tens, self.OFFSET_LEFT, self.OFFSET_TOP, r, g, b)
             self.show_digit(units, self.OFFSET_LEFT+4, self.OFFSET_TOP, r, g, b)
     def startDisplay(self):
-        while True:
-            if int(self.temperature ) <10:
-                self.show_number(int(self.temperature),0,0,255)
-            elif int(self.temperature)>= 10 and int(self.temperature)<=25:
-                self.show_number(int(self.temperature),0,255,0)
-            else:
-                self.show_number(int(self.temperature),255,0,0)
+        if int(self.temperature ) <10:
+            self.show_number(int(self.temperature),0,0,255)
+        elif int(self.temperature)>= 10 and int(self.temperature)<=25:
+            self.show_number(int(self.temperature),0,255,0)
+        else:
+            self.show_number(int(self.temperature),255,0,0)
 display = Display()
 display.startDisplay()

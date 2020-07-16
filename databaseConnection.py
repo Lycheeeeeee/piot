@@ -1,16 +1,13 @@
-
 import mysql.connector
 from pathlib import Path
 from dotenv import load_dotenv
 import os
 load_dotenv(verbose=True)
-env_path = Path('/Users/khanhni/Workplace/piot/.env')
-load_dotenv(dotenv_path=env_path)
-print(os.getenv("USER"))
+load_dotenv(dotenv_path='/home/pi/piot/.env')
 class MySQLConn:
     conn = mysql.connector.connect(
     host= os.getenv("HOST"), 
-    user= os.getenv("USER"),
+    user= os.getenv("mysql"),
     password= os.getenv("PASSWORD") ,
     database= os.getenv("DATABASE"),
     port= os.getenv("PORT")
