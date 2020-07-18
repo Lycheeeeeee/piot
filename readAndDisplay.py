@@ -2,18 +2,18 @@ from sense_hat import SenseHat
 import json
 import time
 from databaseConnection import MySQLConn
+from senseHatCalibration import Calibration
 class Display:
     s = SenseHat()
     mysqlconn = MySQLConn()
     mydb = mysqlconn.conn
   
     mycursor = mysqlconn.cursor()
-
+    cali = Calibration()
     green = (0, 255, 0)
     blue = (0, 0, 255)
     red = (255, 0, 0)
-    temperature = s.get_temperature()
-        
+    temperature = cali.get_accurate_temp()
     OFFSET_LEFT = 1
     OFFSET_TOP = 2
 
@@ -45,9 +45,11 @@ class Display:
             self.show_digit(tens, self.OFFSET_LEFT, self.OFFSET_TOP, r, g, b)
             self.show_digit(units, self.OFFSET_LEFT+4, self.OFFSET_TOP, r, g, b)
     def startDisplay(self):
-        if int(self.temperature ) <10:
+        with open('config.json') as configFile:
+            data = json.load(configFile)
+        if int(self.temperature ) < data['cold_max']:
             self.show_number(int(self.temperature),0,0,255)
-        elif int(self.temperature)>= 10 and int(self.temperature)<=25:
+        elif int(self.temperature)>= data['cold_max'] and int(self.temperature)<= data['hot_min']:
             self.show_number(int(self.temperature),0,255,0)
         else:
             self.show_number(int(self.temperature),255,0,0)

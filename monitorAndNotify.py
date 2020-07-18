@@ -7,10 +7,12 @@ from sense_hat import SenseHat
 from dotenv import load_dotenv
 from pathlib import Path
 from databaseConnection import MySQLConn
-
+from senseHatCalibration import Calibration
 
 class Monitor:
   sense = SenseHat()
+  cali = Calibration()
+  real_temp = cali.get_accurate_temp()
   mysqlconn = MySQLConn()
   mydb = mysqlconn.conn
   now = datetime.now()
@@ -23,19 +25,19 @@ class Monitor:
 
   def saveToDatabase(self):
     
-    if self.checkComfortableRange():
+    if self.comfortableRange():
       sql = "INSERT INTO records (date,temperature, humidity, comfortable) VALUES (%s,%s,%s,true)"
-      val = (self.time,self.sense.get_temperature(), self.sense.get_humidity())
+      val = (self.time,self.real_temp, self.sense.get_humidity())
     else:
       sql = "INSERT INTO records (date,temperature, humidity, comfortable) VALUES (%s,%s,%s,false)"
-      val = (self.time, self.sense.get_temperature(), self.sense.get_humidity()) 
+      val = (self.time, self.real_temp, self.sense.get_humidity()) 
     self.mycursor.execute(sql,val)
     self.mydb.commit()
 
   def comfortableRange(self):
     with open('config.json') as configFile:
       data = json.load(configFile)
-    if self.sense.get_temperature() < data['cold_max'] or self.sense.get_temperature() >data['hot_min']:
+    if self.real_temp < data['cold_max'] or self.real_temp >data['hot_min']:
       return False
     return True
 

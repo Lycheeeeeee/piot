@@ -4,7 +4,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 load_dotenv(verbose=True)
-env_path = Path('/Users/khanhni/Workplace/piot/.env')
+env_path = Path('/home/pi/piot/.env')
 load_dotenv(dotenv_path=env_path)
 mysql = MySQL()
 app.config['MYSQL_DATABASE_USER'] = os.getenv("USER")
