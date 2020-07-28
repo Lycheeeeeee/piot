@@ -11,11 +11,15 @@ from senseHatCalibration import Calibration
 
 class Monitor:
   sense = SenseHat()
+  #get the accurate temperature from Calibration class
   cali = Calibration()
   real_temp = cali.get_accurate_temp()
+  #connect to the mySQL database
   mysqlconn = MySQLConn()
   mydb = mysqlconn.conn
+  #get the current date time
   now = datetime.now()
+  #formating the date (month:day:year)
   time = now.strftime("%m/%d/%Y") 
   mycursor = mysqlconn.cursor
   #def __init__(self, temperature, humidity):
@@ -24,8 +28,8 @@ class Monitor:
     
 
   def saveToDatabase(self):
-    
-    if self.comfortableRange():
+   #if the temperature and the humidity are in the comfortable range, save to the data base with true value in comfortable column 
+    if self.comfortableHumidityRange()["comfortable"] and self.comfortableTemperatureRange()["comfortable"]:
       sql = "INSERT INTO records (date,temperature, humidity, comfortable) VALUES (%s,%s,%s,true)"
       val = (self.time,self.real_temp, self.sense.get_humidity())
     else:
@@ -33,33 +37,69 @@ class Monitor:
       val = (self.time, self.real_temp, self.sense.get_humidity()) 
     self.mycursor.execute(sql,val)
     self.mydb.commit()
-
-  def comfortableRange(self):
+# check if the temperature is in the comfortable range, 
+# if no return false and the value details in a turple of dictionary
+# otherwise just return True 
+  def comfortableTemperatureRange(self):
     with open('config.json') as configFile:
       data = json.load(configFile)
-    if self.real_temp < data['cold_max'] or self.real_temp >data['hot_min']:
-      return False
-    return True
-
+    if self.real_temp < data['cold_max']:
+      return {"comfortable": False,"detail":"below "+str(data['cold_max']-self.real_temp)}
+    if self.real_temp > data['hot_min']:
+      return {"comfortable": False,"detail":"above"+str(self.real_temp-data['hot_min'])}
+    else:
+      return {"comfortable": True}
+# same with temperature    
+  def comfortableHumidityRange(self):
+    with open('config.json') as configFile:
+      data = json.load(configFile)
+    if self.sense.get_humidity()< data['humidity_min']:
+      return {"comfortable": False,"detail":"below "+str(data['humidity_min']-self.sense.get_humidity())}
+    if self.sense.get_humidity()>data['humidity_max']:
+      return {"comfortable": False,"detail":"above"+str(self.sense.get_humidity()- data['humidity_max'])}
+    else:
+      return{"comfortable": True}
+# the flow is first save to the database
+# so if the count of uncomfortable is 1 means has not notified yet
+# it will return false
   def notified(self):
-    sql = """SELECT count(comfortable) FROM records WHERE records.comfortable is
-    false and records.date %(date)s"""
+    sql = """SELECT count(comfortable) FROM records WHERE records.comfortable is false and records.date %(date)s"""
     value= {'date':self.time}
     self.mycursor.execute(sql,value)
     result = self.mycursor.fetchone()
     if result[0] == 1:
       return False
-    return True
-
+    else result[0] == 0:
+      return True
+# check if the end of the day with no uncomfortable value recorded
+  def end_of_the_day():
+    if now.hour == 23 and now.minute == 59 and now.second >= 0 and now.second <= 59 and self.notified():
+      return True
+    else:
+      return False
+# setup the post request to the push bullet with the content variable  
+  def postRequest(content):
+    url = "https://api.pushbullet.com/v2/pushes"
+    header = {'Content-Type': 'application/json','access-token': os.getenv("ACCESS_TOKEN")}
+    data = {"body":content,"title": "Temperature and Humidity monitoring","type":"note"}
+    res = requests.post(url, headers = header , json = data)
+    print(res.text)
+# if the end of the day and everything is all good, it will notify the avarage of temperature and humidity in whole day
+# whenever the temperature and the humidity reach out the comfortable range, notify immediately
+# with the value details but only if there are no notification before(self.notified())
   def pushNotify(self):
-    if not self.comfortableRange() and not self.notified():
-      url = "https://api.pushbullet.com/v2/pushes"
-      header = {'Content-Type': 'application/json','access-token': os.getenv("ACCESS_TOKEN")}
-      data = {"body":"The temperature is out of comfortable ranges","title":"Temperature Warning","type":"note"}
-      res = requests.post(url, headers = header , json = data)
-      print(res.text)
+    if self.end_of_the_day():
+      sql = "Select AVG(records.temperature), AVG(records.humidity) from records"
+      self.mycursor.execute(sql)
+      result = self.mycursor.fetchone()
+      self.postRequest("The Temperature and humidity are in the comfortable range with " + result[0] " Celsius Degree and " + result[1] + "percent in avarage")  
+    elif not self.comfortableTemperatureRange()["comfortable"] and not self.notified():
+      self.postRequest("The Temperature is " +self.comfortableTemperatureRange()["detail"] + " of the comfortable range")
+    elif not self.comfortableHumidityRange()["comfortable"] and not self.notified():
+      self.postRequest("The Humidity is " + self.comfortableHumidityRange()["detail"] + " of the comfortable range")
+    
 
-
+#declare the class then save to the database then call the pushNotify() 
 monitor = Monitor()
 monitor.saveToDatabase()
 monitor.pushNotify()

@@ -10,9 +10,11 @@ class Display:
   
     mycursor = mysqlconn.cursor()
     cali = Calibration()
+# color in RGB format
     green = (0, 255, 0)
     blue = (0, 0, 255)
     red = (255, 0, 0)
+#get accurate temperature
     temperature = cali.get_accurate_temp()
     OFFSET_LEFT = 1
     OFFSET_TOP = 2
@@ -44,6 +46,9 @@ class Display:
         if (abs_val > 9): 
             self.show_digit(tens, self.OFFSET_LEFT, self.OFFSET_TOP, r, g, b)
             self.show_digit(units, self.OFFSET_LEFT+4, self.OFFSET_TOP, r, g, b)
+    # temperature < comfortable min => blue
+    #             in            range => green
+    #             >             max => red
     def startDisplay(self):
         with open('config.json') as configFile:
             data = json.load(configFile)

@@ -10,6 +10,7 @@ def get_newest():
     try:
         conn = mysql.connect()
         cursor = conn.cursor(pymysql.cursors.DictCursor)
+    # select the newest records
         cursor.execute("Select * from records order by records.time Desc limit 1")
         recordRow = cursor.fetchone()
         respone = jsonify(recordRow)
@@ -24,6 +25,7 @@ def get_newest():
 def upload_new():
     try:
         _json = request.json
+    # check if the request body is correct
         if 'humidity' in _json and 'temperature' in _json and 'comfortable' in _json and 'date' in _json and request.method == 'POST':
             _temperature = _json['temperature']
             _humidity = _json['humidity']
@@ -70,6 +72,7 @@ def update_newest():
         print(e)
             
 @app.errorhandler(404)
+# handling the error that makes the incorrect request
 def not_found(error=None):
     message = {
         'status': 404,
