@@ -69,7 +69,7 @@ class Monitor:
     result = self.mycursor.fetchone()
     if result[0] == 1:
       return False
-    if result[0] == 0:
+    if result[0] == 0 or result[0] >1:
       return True
 # check if the end of the day with no uncomfortable value recorded
   def end_of_the_day(self):
