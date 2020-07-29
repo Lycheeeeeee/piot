@@ -1,32 +1,20 @@
 import bluetooth
 import time
+import json
+import os
+from read_json import jsonHandler
+from get_temperature_humidity import senseHatDataRetriever
+from bluetooth_client import bluetoothClient
 
+# Call the delegated functions from import
 
-print("Scanning...")
-nearbyDevices = bluetooth.discover_devices()
-print(nearbyDevices)
+# Get rounded values of temperature and humidity from SenseHAT
+current_temp = round(senseHatDataRetriever.get_true_temp())    
+current_humidity = round(senseHatDataRetriever.get_pressure())
 
-if len(nearbyDevices) > 0:
-    macAddress = nearbyDevices[0]
-    # finding all nearby devices
-    # for macAddress in nearbyDevices:
-    print("Found device with mac-address: " + macAddress)
+# Check temperature and humidity whether they're in range
+msg = jsonHandler.checkRange(current_temp,current_humidity)
 
-        #when found, send message to the device
-    port = 1
-    sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
-    sock.connect((macAddress, port))
-    print("Connected")
-    sock.send("hello!!")
-    print("Printed")
-    sock.close()
-        # finding the port
-# service = bluetooth.find_service(address=macAddress)
-# print(service)
-# print("Port" + service[3])
-    
-        
-else:
-    print("No bluetooth device found")
-# print("Sleeping for 10 seconds.")
-# time.sleep(10)
+# Scan nearby devices and send a message through bluetooth
+bluetoothClient.findDevices(msg)
+
