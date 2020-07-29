@@ -1,14 +1,10 @@
 from sense_hat import SenseHat
 import json
 import time
-from databaseConnection import MySQLConn
 from senseHatCalibration import Calibration
 class Display:
     s = SenseHat()
-    mysqlconn = MySQLConn()
-    mydb = mysqlconn.conn
   
-    mycursor = mysqlconn.cursor()
     cali = Calibration()
 # color in RGB format
     green = (0, 255, 0)
