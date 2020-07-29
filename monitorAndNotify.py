@@ -69,16 +69,16 @@ class Monitor:
     result = self.mycursor.fetchone()
     if result[0] == 1:
       return False
-    else result[0] == 0:
+    if result[0] == 0:
       return True
 # check if the end of the day with no uncomfortable value recorded
-  def end_of_the_day():
-    if now.hour == 23 and now.minute == 59 and now.second >= 0 and now.second <= 59 and self.notified():
+  def end_of_the_day(self):
+    if self.now.hour == 23 and self.now.minute == 59 and self.now.second >= 0 and self.now.second <= 59 and self.notified():
       return True
     else:
       return False
 # setup the post request to the push bullet with the content variable  
-  def postRequest(content):
+  def postRequest(self,content):
     url = "https://api.pushbullet.com/v2/pushes"
     header = {'Content-Type': 'application/json','access-token': os.getenv("ACCESS_TOKEN")}
     data = {"body":content,"title": "Temperature and Humidity monitoring","type":"note"}
@@ -92,7 +92,7 @@ class Monitor:
       sql = "Select AVG(records.temperature), AVG(records.humidity) from records"
       self.mycursor.execute(sql)
       result = self.mycursor.fetchone()
-      self.postRequest("The Temperature and humidity are in the comfortable range with " + result[0] " Celsius Degree and " + result[1] + "percent in avarage")  
+      self.postRequest("The Temperature and humidity are in the comfortable range with " + result[0] + " Celsius Degree and " + result[1] + "percent in avarage")  
     elif not self.comfortableTemperatureRange()["comfortable"] and not self.notified():
       self.postRequest("The Temperature is " +self.comfortableTemperatureRange()["detail"] + " of the comfortable range")
     elif not self.comfortableHumidityRange()["comfortable"] and not self.notified():
