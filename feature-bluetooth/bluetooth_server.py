@@ -18,7 +18,7 @@ def receiveMessages():
 	# Bind the receiver socket and starts listening 
 	receiver_socket.bind(("",port))
 	receiver_socket.listen(1)
-	sender_socket = receiver_socket.accept()
+	sender_socket, address = receiver_socket.accept()
 
 	# Receive the message from bluetooth sender
 	data = sender_socket.recv(1024).decode()

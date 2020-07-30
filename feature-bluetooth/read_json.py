@@ -10,8 +10,11 @@ class jsonHandler:
     @classmethod
     def checkRange(cls, temp, humidity):
         try:
+            
+            current_directory = os.getcwd()
+            file_name = current_directory + "/piot/feature-bluetooth/config_min_max.json"
             # Load the json file into python
-            with open('feature-bluetooth/config_min_max.json') as data_file:
+            with open(file_name) as data_file:
                 data = data_file.read()
                 config_range = json.loads(data)    
             
