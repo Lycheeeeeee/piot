@@ -42,10 +42,8 @@ class Game:
         # time.sleep(0.5)
         # cls.sense.show_message("use joystick to select", \
         #     text_colour=cls.w, back_colour=cls.r, scroll_speed=0.05)
-        cls.sense.show_message("<< P1 <<", text_colour=cls.b, back_colour=cls.w, \
-            scroll_speed=0.05)        
-        cls.sense.show_message(">> P2 >>", text_colour=cls.g, back_colour=cls.w, \
-            scroll_speed=0.05)
+        cls.sense.show_message("<< P1 <<", text_colour=cls.b, scroll_speed=0.05)        
+        cls.sense.show_message(">> P2 >>", text_colour=cls.g, scroll_speed=0.05)
 
         time.sleep(0.5)
         cls.sense.show_message("GO!",text_colour=cls.w, back_colour=cls.r, scroll_speed=0.05)
@@ -101,9 +99,7 @@ class Game:
         cls.sense.clear()
 
     @classmethod
-    def startGame(cls):
-              
-             
+    def startGame(cls):   
         cls.sense.stick.direction_left = cls.left_pushed
         cls.sense.stick.direction_right = cls.right_pushed
 
@@ -114,7 +110,12 @@ class Game:
         print("Player 1: {} in {}".format(cls.p1, cls.counter_p1))
         print("Player 2: {} in {}".format(cls.p2, cls.counter_p2))       
 
-        # Acknowledge the winner
+        # Acknowledge the winner        
+        cls.sense.show_message("Player {} wins".format(cls.winner), back_colour=cls.r,\
+            scroll_speed=0.05)
+
+        cls.sense.clear()
+        
         result_message = "Player {} wins with {} points in {} turns"\
             .format(cls.winner, cls.winner_score, cls.winner_turns)
         
