@@ -14,6 +14,7 @@ class Monitor:
   #get the accurate temperature from Calibration class
   cali = Calibration()
   real_temp = cali.get_accurate_temp()
+  humidity = cali.getHumidity()
   #connect to the mySQL database
   mysqlconn = MySQLConn()
   mydb = mysqlconn.conn
@@ -31,10 +32,10 @@ class Monitor:
    #if the temperature and the humidity are in the comfortable range, save to the data base with true value in comfortable column 
     if self.comfortableHumidityRange()["comfortable"] and self.comfortableTemperatureRange()["comfortable"]:
       sql = "INSERT INTO records (date,temperature, humidity, comfortable) VALUES (%s,%s,%s,true)"
-      val = (self.time,self.real_temp, self.sense.get_humidity())
+      val = (self.time,self.real_temp, self.humidity)
     else:
       sql = "INSERT INTO records (date,temperature, humidity, comfortable) VALUES (%s,%s,%s,false)"
-      val = (self.time, self.real_temp, self.sense.get_humidity()) 
+      val = (self.time, self.real_temp, self.humidity) 
     self.mycursor.execute(sql,val)
     self.mydb.commit()
 # check if the temperature is in the comfortable range, 
@@ -53,10 +54,10 @@ class Monitor:
   def comfortableHumidityRange(self):
     with open('config.json') as configFile:
       data = json.load(configFile)
-    if self.sense.get_humidity()< data['humidity_min']:
-      return {"comfortable": False,"detail":"below "+str(data['humidity_min']-self.sense.get_humidity())}
-    if self.sense.get_humidity()>data['humidity_max']:
-      return {"comfortable": False,"detail":"above"+str(self.sense.get_humidity()- data['humidity_max'])}
+    if self.humidity< data['humidity_min']:
+      return {"comfortable": False,"detail":"below "+str(data['humidity_min']-self.humidity)}
+    if self.humidity>data['humidity_max']:
+      return {"comfortable": False,"detail":"above"+str(self.humidity- data['humidity_max'])}
     else:
       return{"comfortable": True}
 # the flow is first save to the database

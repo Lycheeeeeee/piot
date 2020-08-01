@@ -20,3 +20,5 @@ class Calibration:
         t_corr = t - ((t_cpu - t) / 1.5)
         return t_corr
 
+    def getHumidity(self):
+        return self.sense.get_humidity()

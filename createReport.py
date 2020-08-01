@@ -35,14 +35,16 @@ class Report:
                 file_object = open('report.csv', 'a')
 # take the first one among the bad records of that day (baddayResult[index][1][0]) 
 # to write to the csv file
-                if int(baddayResult[index][1][0])<data['cold_max']:
-                    diff = data['cold_max']-int(baddayResult[index][1][0])
-                    file_object.write(i[0]+" BAD: "+str(diff)+ " C degree below the comfort temperature\n")
-                    file_object.close()
-                if int(baddayResult[index][1][0]) > data['hot_min']:
-                    diff = int(baddayResult[index][1][0])-data['hot_min']
-                    file_object.write(i[0]+" BAD: "+str(diff)+ "C degree above the comfort temperature\n")
-                    file_object.close()
+                tuple_temp = self.turn_string_to_tuple(baddayResult[index][1])
+                for j in tuple_temp:
+                    if j <data['cold_max']:
+                        diff = data['cold_max']-j
+                        file_object.write(i[0]+" BAD: "+str(diff)+ " C degree below the comfort temperature\n")
+                        file_object.close()
+                    if j > data['hot_min']:
+                        diff = j-data['hot_min']
+                        file_object.write(i[0]+" BAD: "+str(diff)+ "C degree above the comfort temperature\n")
+                        file_object.close()
 # if the day is good day, just write OK
             if i[0] in diction['goodDay']:
                 file_object = open('report.csv', 'a')
@@ -62,6 +64,9 @@ class Report:
         d['goodDay'] = goodDay
         d['badDay'] = listContentBadDayOnly
         return d
+    
+    def turn_string_to_tuple(self,string):
+        return tuple(map(int, string.split(','))) 
 
 report = Report()
 report.writeReport()
