@@ -33,15 +33,15 @@ class Game:
     # Introduce the game
     @classmethod
     def showIntro(cls):
-        # cls.sense.show_message("Welcome!", text_colour=cls.w, back_colour=cls.r,\
-        #      scroll_speed=0.05)
-        # time.sleep(0.5)
-        # cls.sense.show_message("shake the Pi and get 30 first to win", \
-        #     text_colour=cls.w, back_colour=cls.r, scroll_speed=0.05)
+        cls.sense.show_message("Welcome!", text_colour=cls.w, back_colour=cls.r,\
+             scroll_speed=0.05)
+        time.sleep(0.5)
+        cls.sense.show_message("shake the Pi and get 30 first to win", \
+            text_colour=cls.w, back_colour=cls.r, scroll_speed=0.05)
         
-        # time.sleep(0.5)
-        # cls.sense.show_message("use joystick to select", \
-        #     text_colour=cls.w, back_colour=cls.r, scroll_speed=0.05)
+        time.sleep(0.5)
+        cls.sense.show_message("use joystick to select", \
+            text_colour=cls.w, back_colour=cls.r, scroll_speed=0.05)
         cls.sense.show_message("<< P1 <<", text_colour=cls.b, scroll_speed=0.05)        
         cls.sense.show_message(">> P2 >>", text_colour=cls.g, scroll_speed=0.05)
 
@@ -115,8 +115,8 @@ class Game:
             scroll_speed=0.05)
 
         cls.sense.clear()
-        
-        result_message = "Player {} wins with {} points in {} turns"\
+
+        result_message = "P{} wins with {} points in {} turns"\
             .format(cls.winner, cls.winner_score, cls.winner_turns)
         
         # Write to csv file
