@@ -15,12 +15,12 @@ def get_newest():
         recordRow = cursor.fetchone()
         respone = jsonify(recordRow)
         respone.status_code = 200
+        cursor.close()
+        conn.close()
         return respone
     except Exception as e:
         print(e)
-    finally:
-	    cursor.close() 
-	    conn.close()
+	    
 @app.route('/upload', methods=['POST'])
 def upload_new():
     try:

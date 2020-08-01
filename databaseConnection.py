@@ -7,7 +7,7 @@ load_dotenv(dotenv_path='/home/pi/piot/.env')
 class MySQLConn:
     conn = mysql.connector.connect(
     host= os.getenv("HOST"), 
-    user= os.getenv("USERR"),
+    user= 'mysql',
     password= os.getenv("PASSWORD") ,
     database= os.getenv("DATABASE"),
     port= os.getenv("PORT")

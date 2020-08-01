@@ -6,7 +6,7 @@ import os
 load_dotenv(verbose=True)
 load_dotenv(dotenv_path='/home/pi/piot/.env')
 mysql = MySQL()
-app.config['MYSQL_DATABASE_USER'] = os.getenv("USER")
+app.config['MYSQL_DATABASE_USER'] = os.getenv("USERR")
 app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv("PASSWORD")
 app.config['MYSQL_DATABASE_DB'] = os.getenv("DATABASE")
 app.config['MYSQL_DATABASE_HOST'] = os.getenv("HOST")
