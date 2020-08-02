@@ -11,7 +11,7 @@ class jsonHandler:
     
     # Check temp and humidity with configured range
     @classmethod
-    def checkRange(cls, temp, humidity):
+    def check_range(cls, temp, humidity):
         try:
             # Get relative file path
             current_directory = (__file__).split("read_json.py")[0]
@@ -29,10 +29,10 @@ class jsonHandler:
             cls.max_humidity = config_range["max_humidity"]
 
             # Check if the values are in range
-            temp_position = jsonHandler.checkTemp(temp)
+            temp_position = jsonHandler.check_temp(temp)
             temp_message = "Temperature is {} at {} degrees".\
                 format(temp_position, temp)
-            humidity_position = jsonHandler.checkHumidity(humidity)
+            humidity_position = jsonHandler.check_humidity(humidity)
             humidity_message = "|Humidity is {} at {} percent".\
                 format(humidity_position, humidity)
 
@@ -45,7 +45,7 @@ class jsonHandler:
 
     # Separate function to check temperature
     @classmethod
-    def checkTemp(cls,temp):
+    def check_temp(cls,temp):
         max = cls.max_temp
         min = cls.min_temp
         
@@ -78,7 +78,7 @@ class jsonHandler:
 
     # Separate function to check humidity
     @classmethod
-    def checkHumidity(cls, humidity):
+    def check_humidity(cls, humidity):
         max = cls.max_humidity
         min = cls.min_humidity
         

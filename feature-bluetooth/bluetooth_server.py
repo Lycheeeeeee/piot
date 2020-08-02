@@ -20,7 +20,7 @@ bluetooth_icon = [
     b,b,b,w,b,b,b,b,
 ]
 
-def receiveMessages():
+def receive_messages():
 	# Wait for system to boot
 	time.sleep(20) 
 
@@ -67,4 +67,4 @@ def receiveMessages():
 	server_socket.close()
 
 # Execute the program
-receiveMessages()
+receive_messages()

@@ -37,7 +37,7 @@ class bluetoothClient:
     sense = SenseHat()
     
     @classmethod
-    def sendMessageTo(cls,targetBluetoothMacAddress, msg):
+    def send_message_to(cls,targetBluetoothMacAddress, msg):
         # Setup RFCOMM Bluetooth connection
         port = 1
         client_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
@@ -55,7 +55,7 @@ class bluetoothClient:
         cls.sense.clear()
 
     @classmethod
-    def findDevices(cls,msg):        
+    def find_devices(cls,msg):        
         # Turn on Bluetooth
         subprocess.run("sudo rfkill unblock bluetooth", shell = True)
         time.sleep(1)
@@ -73,7 +73,7 @@ class bluetoothClient:
                 # Found all nearby devices
                 for macAddress in nearbyDevices:                    
                     try:
-                        bluetoothClient.sendMessageTo(macAddress, msg)
+                        bluetoothClient.send_message_to(macAddress, msg)
                     except Exception:
                         # Keep sending to other bluetooth devices
                         continue      

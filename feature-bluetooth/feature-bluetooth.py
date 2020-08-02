@@ -17,7 +17,7 @@ current_temp = round(senseHatDataRetriever.get_true_temp())
 current_humidity = round(senseHatDataRetriever.get_current_humidity())
 
 # Check temperature and humidity whether they're in range
-msg = jsonHandler.checkRange(current_temp,current_humidity)
+msg = jsonHandler.check_range(current_temp,current_humidity)
 
 # Scan nearby devices and send a message through bluetooth
 bluetoothClient.findDevices(msg)
