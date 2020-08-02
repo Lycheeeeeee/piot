@@ -25,6 +25,10 @@ class senseHatDataRetriever:
         print("true_temp: {}".format(str(t_corr)))
         return t_corr
 
+    @classmethod
+    def get_regular_temp(cls):
+        return cls.sense.get_temperature()
+
     # Get humidity
     @classmethod
     def get_current_humidity(cls):        
