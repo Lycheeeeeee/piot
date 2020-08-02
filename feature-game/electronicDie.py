@@ -9,15 +9,10 @@ class eDie:
     # Setup the color
     d = [0, 0, 0]           # Default: Black
     g = [0, 255, 0]         # Green
-    w = [255, 255, 255]     # White
-    r = [255, 0, 0]         # Red
-    o = [255, 165, 0]       # Orange
-    y = [255, 255, 0]       # Yellow
     b = [0, 0, 255]         # Blue
-    purple = [160, 32, 240] # Purple
 
     # Configure the dice on LED matrix
-    # Player 1
+    # Player 1 dice pixel matrix
     one_p1 = [
     d,d,d,d,d,d,d,d,
     d,d,d,d,d,d,d,d,
@@ -84,7 +79,7 @@ class eDie:
     b,b,d,d,d,d,b,b,
     ]
 
-    # Player 2
+    # Player 2 dice pixel matrix
     one_p2 = [
     d,d,d,d,d,d,d,d,
     d,d,d,d,d,d,d,d,
@@ -152,11 +147,11 @@ class eDie:
     ]
 
     @classmethod
-    def die_roll(cls,player):
-        
+    def die_roll(cls,player):        
         # Generate random number from 1 to 6
         randomNumber = random.randint(1,6)
         
+        # Set the dice on LED Matrix
         if randomNumber == 1:
             if player == 1:
                 cls.sense.set_pixels(cls.one_p1)
@@ -198,11 +193,8 @@ class eDie:
         return(randomNumber)        
 
     @classmethod
-    def checkMovement(cls,player):
-        
-             
-
-            
+    def check_movement(cls,player):
+        # Get accelerometer from SenseHat    
         acceleration = cls.sense.get_accelerometer_raw()
         x = acceleration['x']
         y = acceleration['y']
@@ -223,12 +215,7 @@ class eDie:
                 return result          
         
         else:
-            return eDie.checkMovement(player)            
+            return eDie.check_movement(player)            
 
-    @classmethod
-    def test(cls):
-        
-        cls.sense.set_pixels(cls.one_p1)
-
-eDie.test()
+    
 

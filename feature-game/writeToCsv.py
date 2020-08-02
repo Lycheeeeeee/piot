@@ -5,12 +5,13 @@ import os
 class csvHandler:
     # Symbolic initialization
     index_numer = 0
-    path = os.getcwd()
-    file_dir = path + "/piot/feature-game/"
-    file_name = file_dir + "winner.csv"
 
+    # Get absolute file_name
+    path = (__file__).split("writeToCsv.py")[0]
+    file_name = path + "winner.csv"
+    
     @classmethod
-    def getIndexNumber(cls):
+    def get_index_number(cls):
         # Get ordering number
         try:
             with open(cls.file_name, "r", encoding = "utf-8") as data_read:
@@ -26,12 +27,12 @@ class csvHandler:
         return index_number
 
     @classmethod  
-    def writeToCsv(cls, game_result):
+    def write_to_csv(cls, game_result):
         # Get the current time stamp
         now = datetime.now()
         time_stamp = now.strftime("%d/%m/%Y %H:%M:%S")
         
-        index_number = cls.getIndexNumber()
+        index_number = cls.get_index_number()
         # Compile the message row
         row_contents = [index_number,game_result,time_stamp]
         
