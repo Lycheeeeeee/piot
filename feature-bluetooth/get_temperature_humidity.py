@@ -25,6 +25,9 @@ class senseHatDataRetriever:
         print("true_temp: {}".format(str(t_corr)))
         return t_corr
 
+    # The above real temperature algorithm creates 
+    # too much of error margin.
+    # Thus for this version, regular temp is used
     @classmethod
     def get_regular_temp(cls):
         return cls.sense.get_temperature()
@@ -34,6 +37,14 @@ class senseHatDataRetriever:
     def get_current_humidity(cls):        
         return cls.sense.get_humidity()
 
-    
+# use moving average to smooth readings
+def get_smooth(x):
+  if not hasattr(get_smooth, "t"):
+    get_smooth.t = [x,x,x]
+  get_smooth.t[2] = get_smooth.t[1]
+  get_smooth.t[1] = get_smooth.t[0]
+  get_smooth.t[0] = x
+  xs = (get_smooth.t[0]+get_smooth.t[1]+get_smooth.t[2])/3
+  return(xs)
 
         
