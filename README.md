@@ -11,13 +11,13 @@ read temperature and display every minute
 run the apiRESTful server whenever the pi is booted
 @reboot python3 /home/pi/piot/apiRESTful.py
 
-command request to test the API
+1. command request to test the API
 GET the newest records:
   curl --location --request GET 'localhost:5000/get' \
   --header 'Content-Type: application/json' \
   --data-raw '
   '
-POST upload the new record:
+2. POST upload the new record:
   curl --location --request POST 'localhost:5000/upload' \
   --header 'Content-Type: application/json' \
   --data-raw '{	
@@ -26,7 +26,8 @@ POST upload the new record:
 	"date":"07/10/2020",
 	"humidity":45
   }'
-PUT update the newest record:
+  
+3. PUT update the newest record:
   curl --location --request PUT 'localhost:5000/update' \
   --header 'Content-Type: application/json' \
   --data-raw '{	
