@@ -26,7 +26,6 @@ POST upload the new record:
 	"date":"07/10/2020",
 	"humidity":45
   }'
-
 PUT update the newest record:
   curl --location --request PUT 'localhost:5000/update' \
   --header 'Content-Type: application/json' \
