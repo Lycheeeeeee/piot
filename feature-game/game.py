@@ -27,8 +27,8 @@ class Game:
     # Introduce the game
     @classmethod
     def show_intro(cls):
-        cls.sense.show_message("Welcome!", text_colour=cls.p,\
-             scroll_speed=0.08)
+        cls.sense.show_message("Welcome to Shake the Dice 30!",\
+             text_colour=cls.p, scroll_speed=0.08)
         time.sleep(0.5)
         cls.sense.show_message("shake the Pi and get 30 first to win", \
             text_colour=cls.p, scroll_speed=0.08)
