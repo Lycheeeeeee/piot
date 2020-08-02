@@ -21,8 +21,7 @@ class senseHatDataRetriever:
         t_cpu = senseHatDataRetriever.get_cpu_temp()
         # Calculates the real temperature compesating CPU heating.
         t = (t1 + t2) / 2
-        t_corr = t - ((t_cpu - t) / 1.5)
-        print("true_temp: {}".format(str(t_corr)))
+        t_corr = t - ((t_cpu - t) / 1.5)        
         return t_corr
 
     # The above real temperature algorithm creates 
