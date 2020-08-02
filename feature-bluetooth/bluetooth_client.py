@@ -35,6 +35,7 @@ class bluetoothClient:
     ]
 
     sense = SenseHat()
+    
     @classmethod
     def sendMessageTo(cls,targetBluetoothMacAddress, msg):
         # Setup RFCOMM Bluetooth connection
@@ -45,7 +46,7 @@ class bluetoothClient:
         # Send message through the bluetooth socket
         client_socket.send(msg)
 
-        # close the socket
+        # Close the socket
         client_socket.close()
 
         # Display sent success status
@@ -61,13 +62,14 @@ class bluetoothClient:
 
         # Start scaning and sending message
         while True:
+            # Display Bluetooth icon
             cls.sense.clear()
             cls.sense.set_pixels(cls.bluetooth_icon)
+
+            # Discover devices
             nearbyDevices = bluetooth.discover_devices()
 
             if len(nearbyDevices) > 0:
-                print(nearbyDevices)
-
                 # Found all nearby devices
                 for macAddress in nearbyDevices:                    
                     try:

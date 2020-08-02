@@ -12,6 +12,7 @@ from bluetooth_client import bluetoothClient
 time.sleep(20)
 
 # Get rounded values of temperature and humidity from SenseHAT
+retriever = senseHatDataRetriever()
 current_temp = round(senseHatDataRetriever.get_true_temp())    
 current_humidity = round(senseHatDataRetriever.get_current_humidity())
 

@@ -3,11 +3,13 @@ import os
 from sense_hat import SenseHat
 
 class jsonHandler:
+    # Symbolic initialization
     min_temp = 0
     max_temp = 0
     min_humidity = 0
     max_humidity = 0
     
+    # Check temp and humidity with configured range
     @classmethod
     def checkRange(cls, temp, humidity):
         try:
@@ -41,6 +43,7 @@ class jsonHandler:
         except Exception as exception_message:
             print("Cannot load json due to exception {}".format(exception_message))
 
+    # Separate function to check temperature
     @classmethod
     def checkTemp(cls,temp):
         max = cls.max_temp
@@ -73,6 +76,7 @@ class jsonHandler:
                 return("{} degrees below min temperature"
                 .format(str(below_min_value)))
 
+    # Separate function to check humidity
     @classmethod
     def checkHumidity(cls, humidity):
         max = cls.max_humidity

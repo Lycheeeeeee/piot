@@ -39,14 +39,14 @@ def receiveMessages():
 	server_socket=bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 	port = 1
 
-	# Bind the receiver socket and starts listening 
+	# Bind the server socket and starts listening 
 	server_socket.bind(("",port))
 	server_socket.listen(1)
 
 	# Accept incoming connection
 	client_socket, address = server_socket.accept()
 
-	# Receive the message from bluetooth sender
+	# Receive the message from bluetooth client socket
 	data = str(client_socket.recv(1024).decode())
 
 	# Format the message
