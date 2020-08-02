@@ -61,7 +61,7 @@ class Game:
             else:
                 cls.right_pushed(event)
             # If the player reaches 30 first
-            if cls.p1 > 10:
+            if cls.p1 > 30:
                 cls.winner = 1
                 cls.winner_score = cls.p1
                 cls.winner_turns = cls.counter_p1
@@ -85,7 +85,7 @@ class Game:
                 cls.right_pushed(event)
 
             # If the player reaches 30 first
-            if cls.p2 > 10:
+            if cls.p2 > 30:
                 cls.winner = 2
                 cls.winner_score = cls.p2
                 cls.winner_turns = cls.counter_p2
