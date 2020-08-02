@@ -33,7 +33,7 @@ PUT update the newest record:
   '
 
 ----
-Feature-bluetooth:
+FEATURE-BLUETOOTH:
 Setup: 
 a/ run script at startup by using crontab by typing the following command (in terminal): <!-- EDITOR=nano crontab -e -->
 
@@ -47,7 +47,7 @@ Function:
 a/ The scripts run at startup, and the client_side script will find the nearby devices, then send to the devices which are running the server_side script.
 
 b/ Once connected, the client_side sends the message containing the temperature and humidity to the server_side.
-
+----
 FEATURE-GAME:
 Setup: Run the game.py script on the Pi
 
@@ -59,7 +59,7 @@ b/ The players take turn, and toggle SenseHat joystick (Left for Player 1, Right
 c/ First player to get 30 wins the game.
 
 d/ The program write into .csv file the winner score and time stamp of the game.
-
+----
 REFERENCES:
 PEP8 naming conventions
 https://softwareengineering.stackexchange.com/questions/308972/python-file-naming-convention
