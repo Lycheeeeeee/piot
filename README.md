@@ -1,3 +1,8 @@
+# SenseHAT PIOT Project
+###### Project Repository URL:
+https://github.com/Lycheeeeeee/piot/tree/master 
+----
+## TASK A + B:
 crontab -e
 save to the database and push notification every minute
 * * * * * python3 /home/pi/piot/monitorAndDisplay.py
@@ -31,9 +36,8 @@ PUT update the newest record:
 	"humidity":55
   }
   '
-
 ----
-## FEATURE-BLUETOOTH:
+## FEATURE-BLUETOOTH (TASK C):
 ###### Setup: 
 1. Run script at startup by using crontab by typing the following command (in terminal): 'EDITOR=nano crontab -e'
 2. On the client side, append the script to crontab including the path to feature_bluetooth.py: '@reboot python3 path_to_file/feature_bluetooth.py >> path_to_output/cron_log.txt 2>1&'
@@ -45,7 +49,7 @@ PUT update the newest record:
 3. The real temperature algorithm (temperature compensating CPU temp) provided in the lecture produces high margin of error (sometimes it shows -4 degrees), thus this program will use regular temperature obtained directly from senseHat sensor. 
 4. The program is scalable to implement immediately new temperature algorithm in the near future versions.
 ----
-## FEATURE-GAME:
+## FEATURE-GAME (TASK D):
 ###### Setup: 
 1. Run the game.py script on the Pi
 
@@ -55,7 +59,7 @@ PUT update the newest record:
 3. First player to get 30 wins the game.
 4. The program write into .csv file the winner score and time stamp of the game.
 ----
-## REFERENCES:
+## REFERENCES: 
 1. PEP8 naming conventions
 https://softwareengineering.stackexchange.com/questions/308972/python-file-naming-convention
 
