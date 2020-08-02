@@ -32,19 +32,22 @@ class Report:
                     data = json.load(configFile)
                 #get the index of a day in allday by it's value
                 index = diction['badDay'].index(i[0])
-                file_object = open('report.csv', 'a')
 # take the first one among the bad records of that day (baddayResult[index][1][0]) 
 # to write to the csv file
                 tuple_temp = self.turn_string_to_tuple(baddayResult[index][1])
                 for j in tuple_temp:
                     if j <data['cold_max']:
+                        file_object = open('report.csv', 'a')
                         diff = data['cold_max']-j
                         file_object.write(i[0]+" BAD: "+str(diff)+ " C degree below the comfort temperature\n")
                         file_object.close()
+                        break
                     if j > data['hot_min']:
                         diff = j-data['hot_min']
+                        file_object = open('report.csv', 'a')
                         file_object.write(i[0]+" BAD: "+str(diff)+ "C degree above the comfort temperature\n")
                         file_object.close()
+                        break
 # if the day is good day, just write OK
             if i[0] in diction['goodDay']:
                 file_object = open('report.csv', 'a')
