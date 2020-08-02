@@ -1,5 +1,6 @@
 import json
 import os
+from sense_hat import SenseHat
 
 class jsonHandler:
     min_temp = 0
@@ -34,7 +35,8 @@ class jsonHandler:
             return(result)
 
         except Exception as exception_message:
-            print("Cannot load json due to exception {}".format(exception_message))
+            SenseHat().show_message("Error: {}".format(exception_message))
+            # print("Cannot load json due to exception {}".format(exception_message))
 
 # Background logic
 # Define methods to be called in the static method

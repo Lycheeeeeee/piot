@@ -21,7 +21,7 @@ class senseHatDataRetriever:
         return t_corr
 
     @staticmethod
-    def get_pressure():
+    def get_current_humidity():
         sense = SenseHat()
         return sense.get_humidity()
 

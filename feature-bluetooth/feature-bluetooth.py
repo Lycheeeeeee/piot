@@ -10,7 +10,7 @@ from bluetooth_client import bluetoothClient
 
 # Get rounded values of temperature and humidity from SenseHAT
 current_temp = round(senseHatDataRetriever.get_true_temp())    
-current_humidity = round(senseHatDataRetriever.get_pressure())
+current_humidity = round(senseHatDataRetriever.get_current_humidity())
 
 # Check temperature and humidity whether they're in range
 msg = jsonHandler.checkRange(current_temp,current_humidity)
