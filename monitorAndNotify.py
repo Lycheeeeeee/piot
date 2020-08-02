@@ -64,7 +64,7 @@ class Monitor:
 # so if the count of uncomfortable is 1 means has not notified yet
 # it will return false
   def notified(self):
-    sql = """SELECT count(comfortable) FROM records WHERE records.comfortable is false and records.date %(date)s"""
+    sql = """SELECT count(comfortable) FROM records WHERE records.comfortable is false and records.date = %(date)s"""
     value= {'date':self.time}
     self.mycursor.execute(sql,value)
     result = self.mycursor.fetchone()
