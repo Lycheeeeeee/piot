@@ -5,7 +5,6 @@ from sense_hat import SenseHat
 
 # Create a class
 class bluetoothClient:
-
     # Color initialization
     w = [255, 255, 255]     # White
     r = [255, 0, 0]         # Red
@@ -23,12 +22,21 @@ class bluetoothClient:
     b,b,b,w,b,b,b,b,
     ]
 
+    # Tick icon pixel matrix
+    tick_icon = [
+        b,b,b,b,b,b,b,b,
+        b,b,b,b,b,b,b,b,
+        b,b,b,b,b,b,b,w,
+        b,b,b,b,b,b,w,b,
+        b,b,b,b,b,w,b,b,
+        w,b,b,b,w,b,b,b,
+        b,w,b,w,b,b,b,b,
+        b,b,w,b,b,b,b,b,
+    ]
+
     sense = SenseHat()
-    @staticmethod
-    def sendMessageTo(targetBluetoothMacAddress, msg):
-        # Clear SenseHat
-        SenseHat().clear()
-        
+    @classmethod
+    def sendMessageTo(cls,targetBluetoothMacAddress, msg):
         # Setup RFCOMM Bluetooth connection
         port = 1
         client_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
@@ -40,10 +48,13 @@ class bluetoothClient:
         # close the socket
         client_socket.close()
 
+        # Display sent success status
+        cls.sense.set_pixels(cls.tick_icon)
+        time.sleep(3)
+        cls.sense.clear()
+
     @classmethod
-    def findDevices(cls,msg):
-        # # Wait for system
-	    # time.sleep(10) 
+    def findDevices(cls,msg):        
         # Turn on Bluetooth
         subprocess.run("sudo rfkill unblock bluetooth", shell = True)
         time.sleep(1)
@@ -58,9 +69,7 @@ class bluetoothClient:
                 print(nearbyDevices)
 
                 # Found all nearby devices
-                for macAddress in nearbyDevices:
-                    print("Found device with mac-address: " + macAddress)
-                    print("Sending message to " + macAddress)
+                for macAddress in nearbyDevices:                    
                     try:
                         bluetoothClient.sendMessageTo(macAddress, msg)
                     except Exception:
@@ -68,6 +77,4 @@ class bluetoothClient:
                         continue      
                 
                 break # Quit searching for devices to send
-
-            # else: # Wait before trying searching again
-            #     time.sleep(10)
+            

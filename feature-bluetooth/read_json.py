@@ -11,9 +11,10 @@ class jsonHandler:
     @classmethod
     def checkRange(cls, temp, humidity):
         try:
+            # Get relative file path
+            current_directory = (__file__).split("read_json.py")[0]
+            file_name = current_directory + "config_min_max.json"
             
-            current_directory = os.getcwd()
-            file_name = current_directory + "/piot/feature-bluetooth/config_min_max.json"
             # Load the json file into python
             with open(file_name) as data_file:
                 data = data_file.read()
@@ -25,26 +26,27 @@ class jsonHandler:
             cls.min_humidity = config_range["min_humidity"]
             cls.max_humidity = config_range["max_humidity"]
 
+            # Check if the values are in range
             temp_position = jsonHandler.checkTemp(temp)
-            temp_message = "> Temperature is {} at {} degrees".format(temp_position, temp)
+            temp_message = "Temperature is {} at {} degrees".\
+                format(temp_position, temp)
             humidity_position = jsonHandler.checkHumidity(humidity)
-            humidity_message = "> Humidity is {} at {}%".format(humidity_position, humidity)
+            humidity_message = "|Humidity is {} at {} percent".\
+                format(humidity_position, humidity)
 
             # Return the message
             result = temp_message + " " + humidity_message
             return(result)
 
         except Exception as exception_message:
-            SenseHat().show_message("Error: {}".format(exception_message))
-            # print("Cannot load json due to exception {}".format(exception_message))
+            print("Cannot load json due to exception {}".format(exception_message))
 
-# Background logic
-# Define methods to be called in the static method
     @classmethod
     def checkTemp(cls,temp):
         max = cls.max_temp
         min = cls.min_temp
         
+        # Range checking algorithm
         if temp > max:
             above_max_value = temp - max
             return("{} degrees above max temperature"
@@ -76,6 +78,7 @@ class jsonHandler:
         max = cls.max_humidity
         min = cls.min_humidity
         
+        # Range checking algorithm
         if humidity > max:
             above_max_value = humidity - max
             return("{} percent above max humidity"
