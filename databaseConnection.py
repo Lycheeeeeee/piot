@@ -3,7 +3,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 load_dotenv(verbose=True)
-load_dotenv(dotenv_path='/home/pi/piot/.env')
+env_path = os.getcwd()
+load_dotenv(dotenv_path= env_path + '/.env')
 class MySQLConn:
     conn = mysql.connector.connect(
     host= os.getenv("HOST"), 
