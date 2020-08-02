@@ -1,9 +1,34 @@
-#crontab -e
-vim editor
-  * * * * * cd ~/ && ./runMonitor.sh
-remember to chmod the .sh file
-#crontab for display the temperature
-  * * * * * cd ~/ && ./startDisplay.sh
-#crontab for run the api server
-  @reboot python3 /home/pi/piot/apiRESTful.py OR
-  @reboot cd ~/ && ./api.sh
+crontab -e
+save to the database and push notification every minute
+* * * * * python3 /home/pi/piot/monitorAndDisplay.py
+read temperature and display every minute
+* * * * * python3 /home/pi/piot/readAndDisplay.py
+run the apiRESTful server whenever the pi is booted
+@reboot python3 /home/pi/piot/apiRESTful.py
+
+command request to test the API
+GET the newest records:
+  curl --location --request GET 'localhost:5000/get' \
+  --header 'Content-Type: application/json' \
+  --data-raw '
+  '
+POST upload the new record:
+  curl --location --request POST 'localhost:5000/upload' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{	
+  "temperature":20,
+	"comfortable":false,
+	"date":"07/10/2020",
+	"humidity":45
+  }'
+
+PUT update the newest record:
+  curl --location --request PUT 'localhost:5000/update' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{	
+	"temperature":22,
+	"comfortable":true,
+	"humidity":55
+  }
+  '
+
