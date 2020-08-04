@@ -41,7 +41,7 @@ GET the newest records:
 ###### Setup: 
 1. Run script at startup by using crontab by typing the following command (in terminal): 'EDITOR=nano crontab -e'
 2. On the client side, append the script to crontab including the path to feature_bluetooth.py: '@reboot python3 path_to_file/feature_bluetooth.py >> path_to_output/cron_log.txt 2>1&'
-3. On the server side, run bluetooth_server.py using crontab by typing the command:'@reboot python3 path_to_file/feature_bluetooth.py >> path_to_output/cron_log.txt 2>1&'
+3. On the server side, run bluetooth_server.py using crontab by typing the command:'@reboot python3 path_to_file/bluetooth_server.py >> path_to_output/cron_log.txt 2>1&'
 
 ###### Function:
 1. The scripts run at startup, and the client_side script will find the nearby devices, then send to the devices which are running the server_side script.
